@@ -8,8 +8,8 @@ import random
 import PIL 
 from PIL import Image  
 
-themes_dir = '/home/kiwi/.config/termanime/themes'
-config_dir = '/home/kiwi/.config/termanime/termanime.conf'
+themes_dir = os.path.expanduser('~/.config/termanime/themes')
+config_dir = os.path.expanduser('~/.config/termanime/termanime.conf')
 
 def get_theme() :
     with open(config_dir, 'r') as f:
