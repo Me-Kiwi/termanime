@@ -8,7 +8,7 @@ import random
 import PIL 
 from PIL import Image  
 
-themes_dir = os.path.expanduser('~/.config/termanime/themes')
+themes_dir = os.path.expanduser('~/.themes/termanime')
 config_dir = os.path.expanduser('~/.config/termanime/termanime.conf')
 
 cofig = {}
@@ -29,9 +29,16 @@ def print_list() :
     for i in os.listdir(themes_dir):
         print(i)
 
+def print_img(theme) :
+    path = ''
+    if theme:
+        path = os.path.join(themes_dir, theme)
+        if not os.path.exists(path):
+            print("Theme does not exist..")
+            exit(1)
+    else:
+        path = os.path.join(themes_dir, config["theme"])
 
-def print_img(theme) : 
-    path = os.path.join(themes_dir,theme if theme else config["theme"])
     for i in os.listdir(path) :
         print(i)
 
@@ -52,7 +59,12 @@ def add_image(add_img, name, theme) :
     if theme :
         path = os.path.join(themes_dir, theme)
         if not os.path.exists(path) :
-            os.mkdir(path)
+            print("Theme does not exist do you want to create one (y/N): ", end='')
+            a=input()
+            if 'y' in a.lower():
+                os.mkdir(path)
+            else:
+                exit(1)
         path = os.path.join(path, name if name else basename)
     else :
         path = os.path.join(themes_dir, config["theme"], name if name else basename)
