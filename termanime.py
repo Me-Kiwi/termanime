@@ -15,13 +15,15 @@ cofig = {}
 
 def load_config() :
     global config 
-    with open(config_dir,'r') as f :
-        toml.load(f)
     config = toml.load(config_dir)
 
-def load_config() :
-    global config 
-    config = toml.load(config_dir)
+def save_config():
+    if not os.path.exists(config_dir):
+        print('Config file not found :(')
+    else:
+        with open(config_dir, 'w') as f:
+            toml.dump(config, f)
+
 
 def print_list() : 
     for i in os.listdir(themes_dir):
@@ -33,13 +35,12 @@ def print_img(theme) :
     for i in os.listdir(path) :
         print(i)
 
-def new_theme(set_theme) :
-    path = os.path.join(themes_dir, set_theme)
+def change_theme(theme) :
+    config["theme"] = theme
+    path = os.path.join(themes_dir, theme)
     if not os.path.exists(path):
-        print('Directory does not exists')
-    else:
-        with open(config_dir, 'w') as f:
-            f.write(set_theme)
+        print('Theme does not exist')
+    save_config()
             
 def add_image(add_img, name, theme) :
     img = PIL.Image.open(add_img)
@@ -59,8 +60,7 @@ def add_image(add_img, name, theme) :
 
 def state_toggle(state) :
     config['enabled'] = state
-    with open(config_dir,'w') as f :
-         toml.dump(config, f)
+    save_config()
 
 def print_image() :
     theme = config["theme"]
@@ -147,7 +147,7 @@ def main() -> None :
     elif args.get_theme:
         print(config["theme"])
     elif args.set_theme :
-        new_theme(args.set_theme)
+        change_theme(args.set_theme)
     elif args.add_img :
         add_image(args.add_img, args.name, args.theme)
     elif args.remove_img :
